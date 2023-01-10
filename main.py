@@ -1,5 +1,11 @@
 import RPi.GPIO as GPIO
+import logging
+import time
 from datetime import datetime
+
+# Set up logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
+
 
 red_pin = 22
 green_pin = 16
@@ -42,13 +48,18 @@ blue_days = [
   (9, 11),  
 ]
 
+logging.info("Starting LED control program")
+
 # Set the LED to the appropriate color based on the current date
 while True:
   now = datetime.now()
   if (now.month, now.day) in yellow_days:
     set_color("yellow")
+    logging.info("Setting LED to yellow")
   elif (now.month, now.day) in blue_days:
     set_color("blue")
+    logging.info("Setting LED to blue")
   else:
     set_color("off")
-    
+    logging.info("Turning LED off")
+  time.sleep(60)  # Delay for 60s
