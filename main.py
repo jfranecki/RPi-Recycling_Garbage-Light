@@ -3,7 +3,7 @@ import logging
 import time
 from datetime import datetime
 
-yellow_led_pin = 23
+yellow_led_pin = 24
 blue_led_pin = 15
 
 # Set up logging
