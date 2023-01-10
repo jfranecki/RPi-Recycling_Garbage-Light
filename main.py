@@ -18,44 +18,45 @@ GPIO.setup(blue_led_pin, GPIO.OUT)
 def set_led(led_pin, state):
   GPIO.output(led_pin, state)
 
+# All dates are set 1 day prior
 # List of days to set the yellow LED on: Garbage
 yellow_days = [
-  (1, 11),
-  (1, 19),
-  (1, 26),
-  (2, 2),
-  (2, 9),
-  (2, 16),
-  (2, 23),
-  (3, 2),
-  (3, 9),
-  (3, 16),
-  (3, 23),
-  (3, 30),
+  (1, 10),
+  (1, 18),
+  (1, 25),
+  (2, 1),
+  (2, 8),
+  (2, 15),
+  (2, 22),
+  (3, 1),
+  (3, 8),
+  (3, 15),
+  (3, 22),
+  (3, 29),
 ]
 
+# All dates are set 1 day prior
 # List of days to set the blue LED on: Recycling
 blue_days = [
-  (1, 20),
-  (2, 3),
-  (2, 17),
-  (3, 3),
-  (3, 17),
-  (3, 31),
+  (1, 19),
+  (2, 2),
+  (2, 16),
+  (3, 2),
+  (3, 16),
+  (3, 30),
 ]
 
 logging.info("Starting LED control program")
 
 # Set the LED to the appropriate color based on the current date
-# if (now.month, now.day-1) adding -1 to day because we want to know the day before
 while True:
   now = datetime.now()
-  if (now.month, now.day-1) in yellow_days:
+  if (now.month, now.day) in yellow_days:
     set_led(yellow_led_pin, True)
     logging.info("Turning yellow LED on")
   else:
     set_led(yellow_led_pin, False)
-  if (now.month, now.day-1) in blue_days:
+  if (now.month, now.day) in blue_days:
     set_led(blue_led_pin, True)
     logging.info("Turning blue LED on")
   else:
