@@ -60,4 +60,5 @@ while True:
     logging.info("Turning blue LED on")
   else:
     set_led(blue_led_pin, False)
+    logging.info("Current Date is " + str(now.month) + "/" + str(now.day) + ". No day found for light activation.")
   time.sleep(60)  # Delay for 1m
