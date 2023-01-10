@@ -3,63 +3,61 @@ import logging
 import time
 from datetime import datetime
 
+yellow_led_pin = 23
+blue_led_pin = 15
+
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 
-
-red_pin = 22
-green_pin = 16
-blue_pin = 10
-
-
 # Set up the GPIO pins
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(red_pin, GPIO.OUT)
-GPIO.setup(green_pin, GPIO.OUT)
-GPIO.setup(blue_pin, GPIO.OUT)
+GPIO.setup(yellow_led_pin, GPIO.OUT)
+GPIO.setup(blue_led_pin, GPIO.OUT)
 
-# Define a function to set the LED to a specific color
-def set_color(color):
-  if color == "yellow":
-    # Set the LED to yellow by turning on the red and green channels
-    GPIO.output(red_pin, True)
-    GPIO.output(green_pin, True)
-    GPIO.output(blue_pin, False)
-  elif color == "blue":
-    # Set the LED to blue by turning on the blue channel
-    GPIO.output(red_pin, False)
-    GPIO.output(green_pin, False)
-    GPIO.output(blue_pin, True)
-  else:
-    # Turn off the LED
-    GPIO.output(red_pin, False)
-    GPIO.output(green_pin, False)
-    GPIO.output(blue_pin, False)
+# Define a function to turn an LED on or off
+def set_led(led_pin, state):
+  GPIO.output(led_pin, state)
 
-# List of days to set the LED to yellow
+# List of days to set the yellow LED on: Garbage
 yellow_days = [
-  (1, 9),
-  (12, 25),
+  (1, 11),
+  (1, 19),
+  (1, 26),
+  (2, 2),
+  (2, 9),
+  (2, 16),
+  (2, 23),
+  (3, 2),
+  (3, 9),
+  (3, 16),
+  (3, 23),
+  (3, 30),
 ]
 
-# List of days to set the LED to blue
+# List of days to set the blue LED on: Recycling
 blue_days = [
-  (7, 4),  
-  (9, 11),  
+  (1, 20),
+  (2, 3),
+  (2, 17),
+  (3, 3),
+  (3, 17),
+  (3, 31),
 ]
 
 logging.info("Starting LED control program")
 
 # Set the LED to the appropriate color based on the current date
+# if (now.month, now.day-1) adding -1 to day because we want to know the day before
 while True:
   now = datetime.now()
-  if (now.month, now.day) in yellow_days:
-    set_color("yellow")
-    logging.info("Setting LED to yellow")
-  elif (now.month, now.day) in blue_days:
-    set_color("blue")
-    logging.info("Setting LED to blue")
+  if (now.month, now.day-1) in yellow_days:
+    set_led(yellow_led_pin, True)
+    logging.info("Turning yellow LED on")
   else:
-    set_color("off")
-    logging.info("Turning LED off")
-  time.sleep(60)  # Delay for 60s
+    set_led(yellow_led_pin, False)
+  if (now.month, now.day-1) in blue_days:
+    set_led(blue_led_pin, True)
+    logging.info("Turning blue LED on")
+  else:
+    set_led(blue_led_pin, False)
+  time.sleep(60)  # Delay for 1m
