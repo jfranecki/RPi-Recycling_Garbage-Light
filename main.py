@@ -14,12 +14,19 @@ GPIO.setmode(GPIO.BCM)
 GPIO.setup(yellow_led_pin, GPIO.OUT)
 GPIO.setup(blue_led_pin, GPIO.OUT)
 
-# Define a function to turn an LED on or off
-def set_led(led_pin, state):
-  GPIO.output(led_pin, state)
+def set_led(led_pin, state, color):
+    GPIO.output(led_pin, state)
+    if state:
+        logging.info(f"Turning {color} LED on")
+    else:
+        logging.info(f"Turning {color} LED off")
 
-# All dates are set 1 day prior
-# List of days to set the yellow LED on: Garbage
+def set_yellow_led(state):
+    set_led(yellow_led_pin, state, 'yellow')
+
+def set_blue_led(state):
+    set_led(blue_led_pin, state, 'blue')
+
 yellow_days = [
   (1, 10),
   (1, 18),
@@ -35,8 +42,6 @@ yellow_days = [
   (3, 29),
 ]
 
-# All dates are set 1 day prior
-# List of days to set the blue LED on: Recycling
 blue_days = [
   (1, 19),
   (2, 2),
@@ -46,20 +51,20 @@ blue_days = [
   (3, 30),
 ]
 
+
 logging.info("Starting LED control program")
 
-# Set the LED to the appropriate color based on the current date
 while True:
-  now = datetime.now()
-  if (now.month, now.day) in yellow_days:
-    set_led(yellow_led_pin, True)
-    logging.info("Turning yellow LED on")
-  else:
-    set_led(yellow_led_pin, False)
-  if (now.month, now.day) in blue_days:
-    set_led(blue_led_pin, True)
-    logging.info("Turning blue LED on")
-  else:
-    set_led(blue_led_pin, False)
-    logging.info("Current Date is " + str(now.month) + "/" + str(now.day) + ". No day found for light activation.")
-  time.sleep(60)  # Delay for 1m
+    now = datetime.now()
+    if (now.month, now.day) in yellow_days:
+        set_yellow_led(True)
+    else:
+        set_yellow_led(False)
+        
+    if (now.month, now.day) in blue_days:
+        set_blue_led(True)
+    else:
+        set_blue_led(False)
+        logging.info(f"Current Date is {now.month}/{now.day}. No day found for light activation.")
+        
+    time.sleep(60)  # Delay for 1m
